@@ -1,17 +1,34 @@
 import React, {FC, useState} from 'react';
 import './Hello.pcss';
-import {Component1} from "./Component1";
-import {Component2} from "./Component2";
+import {useRequest} from "ahooks";
 
 type Props = {};
 
 export const Hello: FC<Props> = ({}) => {
-    const [renderVersion, setRenderVersion] = useState(0);
+    const [text, setText] = useState('init');
+
+    const request = useRequest(async () => {
+        console.log("### useRequest:", text);
+        return new Promise<void>((resolve) => {
+            setTimeout(() => {
+                setText('hello')
+                resolve()
+                console.log("### after resolve:", text)
+            }, 1000)
+        })
+    }, {
+        manual: true,
+        onBefore: () => {
+            console.log('### onBefore:', text);
+            setText('before')
+        },
+        onSuccess: () => {
+            console.log('### success:', text);
+            setText('success')
+        },
+    })
     return <div className={'Hello'}>
-        <button onClick={() => setRenderVersion(n => n + 1)}>Re-render ({renderVersion})</button>
-        <div>
-            <Component1/>
-            <Component2/>
-        </div>
+        <button onClick={() => request.run()}>Hello</button>
+        <div>{text}</div>
     </div>;
 }

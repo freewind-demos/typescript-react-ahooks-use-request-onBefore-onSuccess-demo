@@ -1,9 +1,9 @@
-TypeScript React Ahooks useRequest Same Request in Different Components Demo
+TypeScript React Ahooks useRequest 'onBefore' 'onSuccess' Demo
 =================================
 
-当指定了cacheKey, useRequest可以当作远程状态管理来用。
+onBefore对于state的修改在useRequest函数中拿不到。
 
-没有指定的话就不行
+useRequest中对state的修改，在onSuccess中可以拿到，因为是async的，有个时间差
 
 ```
 npm install
